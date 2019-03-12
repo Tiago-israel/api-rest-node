@@ -61,19 +61,16 @@ const forgotPassword = async ({ email }, notificationList = []) => {
                 notificationList.push({ error: 'não foi possível enviar o email.' });
         })
     } catch (e) {
-        console.log("erro=>", e);
         notificationList.push({ error: 'Erro ao recuperar a senha, tente novamente.' });
     }
 }
 
 const resetPassword = async ({ email, token, password }, notificationList = []) => {
     const user = await User.findOne({ email }).select('+passwordResetToken passwordResetExpires');
-    console.log(user);
     if (!user) {
         notificationList.push({ error: 'Usuário não encontrado' });
         return;
     }
-    console.log(token,user.passwordResetToken);
     if (token !== user.passwordResetToken) {
         notificationList.push({ error: 'Token inválido' });
         return;
